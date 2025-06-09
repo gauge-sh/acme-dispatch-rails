@@ -1,0 +1,5 @@
+# The root package: Active Record models, configuration, seeds. Domain rules
+# live in packs/core; the HTTP surfaces live in packs/api and packs/web.
+enforce_dependencies: true
+dependencies:
+  - packs/core
