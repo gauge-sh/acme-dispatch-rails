@@ -1,0 +1,15 @@
+meridian:
+  name: Meridian Property Group
+  contact_email: facilities@meridianpg.example
+  phone: "555-201-7788"
+  service_address: 1400 Industrial Pkwy, Building C
+
+harbor:
+  name: Harbor Lane Bakery
+  contact_email: owner@harborlane.example
+  phone: "555-663-0142"
+  service_address: 88 Harbor Lane
+
+quinn:
+  name: Rosa Quinn
+  service_address: 17 Alder Ct
