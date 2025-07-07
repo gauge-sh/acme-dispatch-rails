@@ -10,13 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_06_10_142200) do
+ActiveRecord::Schema[8.1].define(version: 2025_06_22_093100) do
   create_table "customers", force: :cascade do |t|
     t.string "contact_email"
     t.datetime "created_at", null: false
     t.string "name", null: false
     t.string "phone"
     t.string "service_address", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "technicians", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "hourly_cost_cents", null: false
+    t.string "name", null: false
+    t.string "phone"
+    t.json "skill_tags", default: [], null: false
     t.datetime "updated_at", null: false
   end
 end
