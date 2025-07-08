@@ -1,0 +1,16 @@
+reyes:
+  name: Dana Reyes
+  phone: "555-882-4413"
+  skill_tags: ["electrical", "hvac"]
+  hourly_cost_cents: 8000
+
+okada:
+  name: Ben Okada
+  phone: "555-102-9931"
+  skill_tags: ["plumbing"]
+  hourly_cost_cents: 5000
+
+fossey:
+  name: Marta Fossey
+  skill_tags: []
+  hourly_cost_cents: 3333
