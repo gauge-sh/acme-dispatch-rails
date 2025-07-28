@@ -1,0 +1,18 @@
+furnace:
+  customer: meridian
+  title: Furnace not igniting
+  description: Pilot light out, tenant reports clicking
+  priority: urgent
+  status: requested
+
+oven:
+  customer: harbor
+  title: Deck oven runs cold
+  priority: normal
+  status: requested
+
+fence_light:
+  customer: quinn
+  title: Path light flickering
+  priority: low
+  status: requested

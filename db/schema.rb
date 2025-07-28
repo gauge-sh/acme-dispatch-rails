@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_06_22_093100) do
+ActiveRecord::Schema[8.1].define(version: 2025_07_14_104500) do
   create_table "customers", force: :cascade do |t|
     t.string "contact_email"
     t.datetime "created_at", null: false
@@ -18,6 +18,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_06_22_093100) do
     t.string "phone"
     t.string "service_address", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "jobs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "customer_id", null: false
+    t.text "description"
+    t.string "priority", default: "normal", null: false
+    t.string "status", default: "requested", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_jobs_on_customer_id"
   end
 
   create_table "technicians", force: :cascade do |t|
@@ -28,4 +39,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_06_22_093100) do
     t.json "skill_tags", default: [], null: false
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "jobs", "customers"
 end
