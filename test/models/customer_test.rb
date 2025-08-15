@@ -48,3 +48,18 @@ class CustomerTest < ActiveSupport::TestCase
     assert customer.valid?
   end
 end
+
+class CustomerDeletionTest < ActiveSupport::TestCase
+  test "a customer with jobs cannot be deleted" do
+    error = assert_raises Dispatch::ValidationFailed do
+      customers(:meridian).destroy
+    end
+    assert_equal "customer has jobs and cannot be deleted", error.message
+    assert Customer.exists?(customers(:meridian).id)
+  end
+
+  test "a customer without jobs deletes cleanly" do
+    customer = Customer.create!(name: "One Off", service_address: "9 Side St")
+    assert customer.destroy
+  end
+end
