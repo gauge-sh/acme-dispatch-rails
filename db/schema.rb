@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_07_14_104500) do
+ActiveRecord::Schema[8.1].define(version: 2025_08_04_132600) do
+  create_table "appointments", force: :cascade do |t|
+    t.text "completion_notes"
+    t.datetime "created_at", null: false
+    t.integer "job_id", null: false
+    t.datetime "scheduled_end", null: false
+    t.datetime "scheduled_start", null: false
+    t.integer "technician_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_appointments_on_job_id"
+    t.index ["technician_id", "scheduled_start"], name: "index_appointments_on_technician_id_and_scheduled_start"
+    t.index ["technician_id"], name: "index_appointments_on_technician_id"
+  end
+
   create_table "customers", force: :cascade do |t|
     t.string "contact_email"
     t.datetime "created_at", null: false
@@ -40,5 +53,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_07_14_104500) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "appointments", "jobs"
+  add_foreign_key "appointments", "technicians"
   add_foreign_key "jobs", "customers"
 end
