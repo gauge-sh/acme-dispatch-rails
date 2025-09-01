@@ -35,6 +35,55 @@ class TechnicianTest < ActiveSupport::TestCase
     assert_not technician.valid?
   end
 
+  test "technicians are active by default" do
+    technician = Technician.create!(name: "Sam Ortiz", hourly_cost_cents: 6500)
+    assert technician.is_active
+  end
+
+  test "an inactive technician takes no new appointments" do
+    technician = technicians(:reyes)
+    technician.update!(is_active: false)
+
+    error = assert_raises Dispatch::ValidationFailed do
+      Appointment.create!(
+        job: jobs(:furnace),
+        technician: technician,
+        scheduled_start: Time.utc(2025, 9, 10, 9),
+        scheduled_end: Time.utc(2025, 9, 10, 10)
+      )
+    end
+    assert_equal "technician is not active", error.message
+  end
+
+  test "existing appointments survive deactivation" do
+    appointment = Appointment.create!(
+      job: jobs(:furnace),
+      technician: technicians(:reyes),
+      scheduled_start: Time.utc(2025, 9, 10, 9),
+      scheduled_end: Time.utc(2025, 9, 10, 10)
+    )
+    technicians(:reyes).update!(is_active: false)
+    appointment.update!(completion_notes: "Done")
+    assert_equal "Done", appointment.reload.completion_notes
+  end
+
+  test "a technician with appointments cannot be deleted" do
+    Appointment.create!(
+      job: jobs(:furnace),
+      technician: technicians(:reyes),
+      scheduled_start: Time.utc(2025, 9, 10, 9),
+      scheduled_end: Time.utc(2025, 9, 10, 10)
+    )
+    error = assert_raises Dispatch::ValidationFailed do
+      technicians(:reyes).destroy
+    end
+    assert_equal "technician has appointments and cannot be deleted", error.message
+  end
+
+  test "a technician with no appointments deletes cleanly" do
+    assert technicians(:fossey).destroy
+  end
+
   test "name is trimmed and bounded" do
     technician = Technician.new(name: "  Sam Ortiz ", hourly_cost_cents: 6500)
     technician.valid?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_08_04_132600) do
+ActiveRecord::Schema[8.1].define(version: 2025_08_18_091200) do
   create_table "appointments", force: :cascade do |t|
     t.text "completion_notes"
     t.datetime "created_at", null: false
@@ -47,6 +47,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_08_04_132600) do
   create_table "technicians", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "hourly_cost_cents", null: false
+    t.boolean "is_active", default: true, null: false
     t.string "name", null: false
     t.string "phone"
     t.json "skill_tags", default: [], null: false

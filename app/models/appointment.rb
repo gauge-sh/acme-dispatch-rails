@@ -29,6 +29,10 @@ class Appointment < ApplicationRecord
       Dispatch::StatusMachine.check_accepts_appointments!(job.status)
     end
 
+    if (new_record? || technician_id_changed?) && !technician.is_active
+      raise Dispatch::ValidationFailed, "technician is not active"
+    end
+
     candidate = to_booking
     # The SQL window is the same half-open overlap the domain applies; core
     # gets only the rows that could possibly collide.

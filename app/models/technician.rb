@@ -1,4 +1,6 @@
 class Technician < ApplicationRecord
+  has_many :appointments, dependent: nil
+
   normalizes :name, with: ->(value) { value.strip }
   normalizes :phone, with: ->(value) { value.strip.presence }
   # Tags are a plain word list: lower-cased, deduplicated, stored sorted so
@@ -10,11 +12,21 @@ class Technician < ApplicationRecord
   validates :hourly_cost_cents, numericality: { only_integer: true, greater_than: 0 }
   validate :skill_tags_fit
 
+  scope :active, -> { where(is_active: true) }
+
+  before_destroy :refuse_destroy_with_appointments
+
   private
 
   def skill_tags_fit
     return unless skill_tags.any? { |tag| tag.length > 40 }
 
     errors.add(:skill_tags, "tags must be at most 40 characters")
+  end
+
+  def refuse_destroy_with_appointments
+    return unless appointments.exists?
+
+    raise Dispatch::ValidationFailed, "technician has appointments and cannot be deleted"
   end
 end
