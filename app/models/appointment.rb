@@ -25,6 +25,10 @@ class Appointment < ApplicationRecord
   private
 
   def enforce_scheduling_rules
+    if new_record? || job_id_changed?
+      Dispatch::StatusMachine.check_accepts_appointments!(job.status)
+    end
+
     candidate = to_booking
     # The SQL window is the same half-open overlap the domain applies; core
     # gets only the rows that could possibly collide.

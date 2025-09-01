@@ -1,5 +1,6 @@
 class Job < ApplicationRecord
   belongs_to :customer
+  has_many :appointments, dependent: :destroy
 
   enum :priority, %w[low normal urgent].index_by(&:itself), default: "normal", validate: true
   enum :status, Dispatch::StatusMachine::STATUSES.index_by(&:itself), default: "requested", validate: true
@@ -17,7 +18,7 @@ class Job < ApplicationRecord
       raise Dispatch::ValidationFailed, "unknown status"
     end
 
-    Dispatch::StatusMachine.check_transition!(status, next_status)
+    Dispatch::StatusMachine.check_transition!(status, next_status, appointment_count: appointments.count)
     update!(status: next_status)
     self
   end

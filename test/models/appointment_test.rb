@@ -56,6 +56,23 @@ class AppointmentTest < ActiveSupport::TestCase
     end
   end
 
+  test "closed jobs take no new appointments" do
+    { jobs(:furnace) => "completed", jobs(:oven) => "cancelled" }.each do |job, status|
+      job.update_column(:status, status)
+      error = assert_raises Dispatch::ValidationFailed do
+        book(job: job, from: [ 9 ], to: [ 10 ])
+      end
+      assert_equal "appointments cannot be added to a job that is #{status}", error.message
+    end
+  end
+
+  test "editing an appointment on a closed job is still allowed" do
+    appointment = book(from: [ 9 ], to: [ 11 ])
+    jobs(:furnace).update_column(:status, "completed")
+    appointment.update!(completion_notes: "Swapped the igniter")
+    assert_equal "Swapped the igniter", appointment.reload.completion_notes
+  end
+
   test "completion notes are optional and bounded" do
     appointment = book(from: [ 9 ], to: [ 11 ])
     appointment.update!(completion_notes: "  Replaced igniter  ")

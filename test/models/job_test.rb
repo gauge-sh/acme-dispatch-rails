@@ -34,6 +34,22 @@ class JobTest < ActiveSupport::TestCase
     assert job.valid?
   end
 
+  test "a job cannot be scheduled without an appointment" do
+    job = jobs(:fence_light)
+    error = assert_raises Dispatch::ValidationFailed do
+      job.transition_to!("scheduled")
+    end
+    assert_equal "a job needs an appointment before it can be scheduled", error.message
+
+    job.appointments.create!(
+      technician: technicians(:okada),
+      scheduled_start: Time.utc(2025, 9, 12, 9),
+      scheduled_end: Time.utc(2025, 9, 12, 10)
+    )
+    job.transition_to!("scheduled")
+    assert_equal "scheduled", job.reload.status
+  end
+
   test "legal transitions move the status" do
     job = jobs(:fence_light)
     job.transition_to!("cancelled")
