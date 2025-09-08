@@ -1,0 +1,17 @@
+igniter:
+  sku: IGN-4420
+  name: Hot surface igniter
+  unit_cost_cents: 780
+  unit_price_cents: 1299
+
+filter:
+  sku: FLT-2001
+  name: 20x25x1 pleated filter
+  unit_cost_cents: 240
+  unit_price_cents: 499
+
+valve:
+  sku: VLV-0087
+  name: Quarter-turn shutoff valve
+  unit_cost_cents: 610
+  unit_price_cents: 950

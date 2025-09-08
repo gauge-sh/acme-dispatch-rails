@@ -1,0 +1,11 @@
+igniter:
+  part: igniter
+  quantity_on_hand: 10
+
+filter:
+  part: filter
+  quantity_on_hand: 24
+
+valve:
+  part: valve
+  quantity_on_hand: 0

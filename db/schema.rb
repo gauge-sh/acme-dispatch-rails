@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_08_18_091200) do
+ActiveRecord::Schema[8.1].define(version: 2025_09_01_100900) do
   create_table "appointments", force: :cascade do |t|
     t.text "completion_notes"
     t.datetime "created_at", null: false
@@ -44,6 +44,24 @@ ActiveRecord::Schema[8.1].define(version: 2025_08_18_091200) do
     t.index ["customer_id"], name: "index_jobs_on_customer_id"
   end
 
+  create_table "parts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.string "sku", null: false
+    t.integer "unit_cost_cents", null: false
+    t.integer "unit_price_cents", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sku"], name: "index_parts_on_sku", unique: true
+  end
+
+  create_table "stock_levels", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "part_id", null: false
+    t.integer "quantity_on_hand", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["part_id"], name: "index_stock_levels_on_part_id", unique: true
+  end
+
   create_table "technicians", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "hourly_cost_cents", null: false
@@ -57,4 +75,5 @@ ActiveRecord::Schema[8.1].define(version: 2025_08_18_091200) do
   add_foreign_key "appointments", "jobs"
   add_foreign_key "appointments", "technicians"
   add_foreign_key "jobs", "customers"
+  add_foreign_key "stock_levels", "parts"
 end
