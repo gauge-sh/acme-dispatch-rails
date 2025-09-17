@@ -12,7 +12,7 @@ class PartTest < ActiveSupport::TestCase
   end
 
   test "sku must be upper-case alphanumerics and dashes" do
-    %w[CAP-0450 IGN4420 A 40-CHARS-EXACTLY-000000000000000000000000].each do |sku|
+    %w[CAP-0450 IGN4420 A 40-CHARS-EXACTLY-00000000000000000000000].each do |sku|
       assert build_part(sku: sku).valid?, sku
     end
     [ "cap-0450", "CAP 0450", "CAP_0450", "", "x" * 41 ].each do |sku|
