@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_09_01_100900) do
+ActiveRecord::Schema[8.1].define(version: 2025_09_15_140300) do
   create_table "appointments", force: :cascade do |t|
     t.text "completion_notes"
     t.datetime "created_at", null: false
@@ -31,6 +31,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_09_01_100900) do
     t.string "phone"
     t.string "service_address", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "job_parts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "job_id", null: false
+    t.integer "part_id", null: false
+    t.integer "quantity", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_job_parts_on_job_id"
+    t.index ["part_id"], name: "index_job_parts_on_part_id"
   end
 
   create_table "jobs", force: :cascade do |t|
@@ -74,6 +84,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_09_01_100900) do
 
   add_foreign_key "appointments", "jobs"
   add_foreign_key "appointments", "technicians"
+  add_foreign_key "job_parts", "jobs"
+  add_foreign_key "job_parts", "parts"
   add_foreign_key "jobs", "customers"
   add_foreign_key "stock_levels", "parts"
 end

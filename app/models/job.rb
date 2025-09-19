@@ -1,6 +1,7 @@
 class Job < ApplicationRecord
   belongs_to :customer
   has_many :appointments, dependent: :destroy
+  has_many :job_parts, dependent: :destroy
 
   enum :priority, %w[low normal urgent].index_by(&:itself), default: "normal", validate: true
   enum :status, Dispatch::StatusMachine::STATUSES.index_by(&:itself), default: "requested", validate: true

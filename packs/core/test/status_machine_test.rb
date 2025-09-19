@@ -64,6 +64,16 @@ module Dispatch
       end
     end
 
+    test "parts attach until the job is terminal" do
+      %w[requested scheduled in_progress completed].each do |status|
+        StatusMachine.check_accepts_parts!(status)
+      end
+      %w[invoiced cancelled].each do |status|
+        error = assert_raises(ValidationFailed) { StatusMachine.check_accepts_parts!(status) }
+        assert_equal "parts cannot be added to a job that is #{status}", error.message
+      end
+    end
+
     test "terminal statuses" do
       assert StatusMachine.terminal?("invoiced")
       assert StatusMachine.terminal?("cancelled")

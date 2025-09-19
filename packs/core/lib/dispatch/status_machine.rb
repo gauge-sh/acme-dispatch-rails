@@ -28,6 +28,8 @@ module Dispatch
 
     def accepts_appointments?(status) = OPEN_FOR_SCHEDULING.include?(status)
 
+    def accepts_parts?(status) = !terminal?(status)
+
     # Guards the generic transition path. `invoiced` is part of the machine
     # but is never offered here: creating the invoice record is what moves a
     # completed job, so asking for it directly is always refused.
@@ -44,6 +46,12 @@ module Dispatch
       return if accepts_appointments?(status)
 
       raise ValidationFailed, "appointments cannot be added to a job that is #{status}"
+    end
+
+    def check_accepts_parts!(status)
+      return if accepts_parts?(status)
+
+      raise ValidationFailed, "parts cannot be added to a job that is #{status}"
     end
   end
 end
