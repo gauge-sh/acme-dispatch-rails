@@ -7,10 +7,15 @@ class JobPart < ApplicationRecord
 
   validates :quantity, presence: true, numericality: { only_integer: true }
 
+  before_create :capture_unit_price
   before_create :consume_stock
   before_destroy :release_stock
 
   private
+
+  def capture_unit_price
+    self.unit_price_cents ||= part.unit_price_cents
+  end
 
   def consume_stock
     Dispatch::StatusMachine.check_accepts_parts!(job.status)

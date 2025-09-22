@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_09_15_140300) do
+ActiveRecord::Schema[8.1].define(version: 2025_09_29_113000) do
   create_table "appointments", force: :cascade do |t|
     t.text "completion_notes"
     t.datetime "created_at", null: false
@@ -38,6 +38,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_09_15_140300) do
     t.integer "job_id", null: false
     t.integer "part_id", null: false
     t.integer "quantity", null: false
+    t.integer "unit_price_cents", null: false
     t.datetime "updated_at", null: false
     t.index ["job_id"], name: "index_job_parts_on_job_id"
     t.index ["part_id"], name: "index_job_parts_on_part_id"

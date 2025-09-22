@@ -21,6 +21,14 @@ class JobPartTest < ActiveSupport::TestCase
     assert_equal "quantity must be greater than zero", error.message
   end
 
+  test "the unit price is captured at the time of use" do
+    record = JobPart.create!(job: jobs(:furnace), part: parts(:igniter), quantity: 3)
+    assert_equal 1299, record.unit_price_cents
+
+    parts(:igniter).update!(unit_price_cents: 1499)
+    assert_equal 1299, record.reload.unit_price_cents
+  end
+
   test "the same part twice makes two rows" do
     2.times { JobPart.create!(job: jobs(:furnace), part: parts(:filter), quantity: 1) }
     assert_equal 2, jobs(:furnace).job_parts.where(part: parts(:filter)).count
