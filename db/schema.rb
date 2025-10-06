@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_09_29_113000) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_13_154200) do
   create_table "appointments", force: :cascade do |t|
     t.text "completion_notes"
     t.datetime "created_at", null: false
@@ -31,6 +31,31 @@ ActiveRecord::Schema[8.1].define(version: 2025_09_29_113000) do
     t.string "phone"
     t.string "service_address", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "invoice_line_items", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.datetime "created_at", null: false
+    t.string "description", null: false
+    t.integer "invoice_record_id", null: false
+    t.string "kind", null: false
+    t.integer "position", null: false
+    t.decimal "quantity", precision: 12, scale: 6, null: false
+    t.integer "unit_cents", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "weekend", default: false, null: false
+    t.index ["invoice_record_id", "position"], name: "index_invoice_line_items_on_invoice_record_id_and_position", unique: true
+    t.index ["invoice_record_id"], name: "index_invoice_line_items_on_invoice_record_id"
+  end
+
+  create_table "invoice_records", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "job_id", null: false
+    t.integer "labor_cents", null: false
+    t.integer "parts_cents", null: false
+    t.integer "total_cents", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_invoice_records_on_job_id", unique: true
   end
 
   create_table "job_parts", force: :cascade do |t|
@@ -85,6 +110,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_09_29_113000) do
 
   add_foreign_key "appointments", "jobs"
   add_foreign_key "appointments", "technicians"
+  add_foreign_key "invoice_line_items", "invoice_records"
+  add_foreign_key "invoice_records", "jobs"
   add_foreign_key "job_parts", "jobs"
   add_foreign_key "job_parts", "parts"
   add_foreign_key "jobs", "customers"
