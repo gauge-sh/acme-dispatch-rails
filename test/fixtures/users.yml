@@ -1,0 +1,13 @@
+<% password = Devise::Encryptor.digest(User, "dispatch-me-1") %>
+
+marisol:
+  email: marisol@acme-dispatch.example
+  encrypted_password: <%= password %>
+  name: Marisol Vega
+  role: admin
+
+teddy:
+  email: teddy@acme-dispatch.example
+  encrypted_password: <%= password %>
+  name: Teddy Marsh
+  role: dispatcher
