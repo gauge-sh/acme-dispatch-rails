@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_03_112000) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_10_101500) do
   create_table "api_tokens", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -38,6 +38,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_03_112000) do
     t.string "contact_email"
     t.datetime "created_at", null: false
     t.string "name", null: false
+    t.text "notes"
     t.string "phone"
     t.string "service_address", null: false
     t.datetime "updated_at", null: false
