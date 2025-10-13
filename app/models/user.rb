@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :validatable
 
+  has_many :api_tokens, dependent: :destroy
+
   enum :role, { admin: "admin", dispatcher: "dispatcher" }, default: "dispatcher", validate: true
 
   normalizes :name, with: ->(value) { value.strip }
