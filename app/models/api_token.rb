@@ -24,6 +24,11 @@ class ApiToken < ApplicationRecord
     api_token if api_token&.user&.is_active
   end
 
+  # Bookkeeping, not an edit: skips validations and leaves updated_at alone.
+  def touch_last_used
+    update_column(:last_used_at, Time.current)
+  end
+
   private
 
   def assign_token

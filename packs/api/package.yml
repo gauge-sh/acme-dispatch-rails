@@ -1,0 +1,6 @@
+# The JSON API, a mounted engine. Speaks the wire contract in docs/domain.md;
+# all domain decisions defer to packs/core and the models.
+enforce_dependencies: true
+dependencies:
+  - .
+  - packs/core

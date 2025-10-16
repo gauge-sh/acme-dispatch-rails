@@ -9,6 +9,8 @@ require "rails/test_unit/railtie"
 
 Bundler.require(*Rails.groups)
 
+require_relative "../packs/api/lib/api"
+
 module AcmeDispatch
   class Application < Rails::Application
     config.load_defaults 8.1

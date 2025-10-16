@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_10_101500) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_17_090400) do
   create_table "api_tokens", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.datetime "last_used_at"
     t.string "name", null: false
     t.string "token_hash", null: false
     t.datetime "updated_at", null: false
