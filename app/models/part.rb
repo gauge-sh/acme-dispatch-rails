@@ -21,6 +21,7 @@ class Part < ApplicationRecord
     return if unit_price_cents.blank? || unit_cost_cents.blank?
     return if unit_price_cents >= unit_cost_cents
 
-    errors.add(:unit_price_cents, "unit price cannot be below unit cost")
+    # On :base so the message reads exactly as the contract words it.
+    errors.add(:base, "unit price cannot be below unit cost")
   end
 end

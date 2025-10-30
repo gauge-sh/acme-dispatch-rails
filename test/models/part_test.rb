@@ -33,7 +33,7 @@ class PartTest < ActiveSupport::TestCase
   test "price cannot fall below cost, on create or update" do
     part = build_part(cost: 500, price: 499)
     assert_not part.valid?
-    assert_includes part.errors[:unit_price_cents], "unit price cannot be below unit cost"
+    assert_includes part.errors[:base], "unit price cannot be below unit cost"
 
     existing = parts(:igniter)
     existing.unit_price_cents = existing.unit_cost_cents - 1
