@@ -36,6 +36,33 @@ class UserTest < ActiveSupport::TestCase
     assert_not user.active_for_authentication?
   end
 
+  test "the last active admin cannot be demoted, deactivated or deleted" do
+    admin = users(:marisol)
+
+    admin.role = "dispatcher"
+    assert_not admin.valid?
+    assert_includes admin.errors[:base], "cannot remove the last active admin"
+
+    admin.reload.is_active = false
+    assert_not admin.valid?
+
+    error = assert_raises(Dispatch::ValidationFailed) { admin.reload.destroy }
+    assert_equal "cannot remove the last active admin", error.message
+    assert User.exists?(admin.id)
+  end
+
+  test "an admin can step down while another active admin exists" do
+    User.create!(email: "iris@acme-dispatch.example", name: "Iris Chao", password: "dispatch-me-1", role: "admin")
+
+    admin = users(:marisol)
+    admin.update!(role: "dispatcher")
+    assert_equal "dispatcher", admin.reload.role
+  end
+
+  test "deactivating a dispatcher never trips the admin guard" do
+    assert users(:teddy).update(is_active: false)
+  end
+
   test "passwords are checked against the stored digest" do
     assert users(:marisol).valid_password?("dispatch-me-1")
     assert_not users(:marisol).valid_password?("wrong")
