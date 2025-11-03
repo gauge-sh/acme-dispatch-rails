@@ -1,0 +1,63 @@
+<h1>Dispatch board</h1>
+
+<div class="board">
+  <% Dispatch::StatusMachine::STATUSES.each do |status| %>
+    <div class="lane">
+      <div class="count"><%= @counts_by_status.fetch(status, 0) %></div>
+      <div class="label"><%= link_to status.humanize, jobs_path(status: status) %></div>
+    </div>
+  <% end %>
+</div>
+
+<div class="detail-grid">
+  <section>
+    <h2>Open jobs</h2>
+    <% if @open_jobs.any? %>
+      <table>
+        <thead>
+          <tr><th>Job</th><th>Customer</th><th>Priority</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <% @open_jobs.each do |job| %>
+            <tr>
+              <td><%= link_to job.title, job %></td>
+              <td><%= link_to job.customer.name, job.customer %></td>
+              <td><span class="badge priority-<%= job.priority %>"><%= job.priority %></span></td>
+              <td><span class="badge status-<%= job.status %>"><%= job.status.humanize %></span></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="empty">Nothing in flight. <%= link_to "Log a job", new_job_path %> when the phone rings.</div>
+    <% end %>
+  </section>
+
+  <aside>
+    <div class="card">
+      <h2>Today's visits</h2>
+      <% if @today.any? %>
+        <% @today.each do |appointment| %>
+          <p>
+            <strong><%= appointment.scheduled_start.strftime("%H:%M") %></strong>
+            <%= appointment.technician.name %> —
+            <%= link_to appointment.job.title, appointment.job %>
+          </p>
+        <% end %>
+      <% else %>
+        <p class="muted">No appointments today.</p>
+      <% end %>
+    </div>
+
+    <div class="card">
+      <h2>Low stock</h2>
+      <% if @low_stock.any? %>
+        <% @low_stock.each do |level| %>
+          <p><%= link_to level.part.name, level.part %> <span class="muted">(<%= level.quantity_on_hand %> left)</span></p>
+        <% end %>
+      <% else %>
+        <p class="muted">Everything is stocked.</p>
+      <% end %>
+    </div>
+  </aside>
+</div>

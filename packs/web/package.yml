@@ -1,0 +1,6 @@
+# The server-rendered UI. Controllers, helpers and views only; anything
+# worth enforcing lives in packs/core or on the models.
+enforce_dependencies: true
+dependencies:
+  - .
+  - packs/core

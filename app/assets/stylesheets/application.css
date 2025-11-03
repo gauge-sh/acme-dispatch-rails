@@ -1,10 +1,139 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+:root {
+  --ink: #1d2733;
+  --muted: #66707c;
+  --line: #d8dee6;
+  --paper: #f6f8fa;
+  --accent: #175dad;
+  --danger: #a92e2e;
+  --ok: #1d7a45;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+main { max-width: 1080px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.6rem 1rem;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.topbar .brand { font-weight: 700; color: var(--ink); }
+.topbar nav { display: flex; gap: 1rem; flex: 1; }
+.whoami { display: flex; align-items: center; gap: 0.75rem; color: var(--muted); }
+
+.flash { max-width: 1080px; margin: 0.75rem auto 0; padding: 0.6rem 1rem; border-radius: 4px; }
+.flash-notice { background: #e7f4ec; color: var(--ok); }
+.flash-alert { background: #fbeaea; color: var(--danger); }
+
+h1 { font-size: 1.4rem; margin: 0.5rem 0 1rem; }
+h2 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; }
+
+table { width: 100%; border-collapse: collapse; background: #fff; }
+th, td { text-align: left; padding: 0.5rem 0.65rem; border-bottom: 1px solid var(--line); }
+th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
+tr:hover td { background: #fbfcfe; }
+
+.page-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.page-head h1 { margin: 0; }
+
+.button, button, input[type="submit"] {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.button.subtle, button.subtle { background: #fff; color: var(--accent); }
+.button.danger, button.danger { background: #fff; border-color: var(--danger); color: var(--danger); }
+button.linkish { background: none; border: none; color: var(--accent); padding: 0; cursor: pointer; }
+button.linkish:hover { text-decoration: underline; }
+
+form.stacked { max-width: 32rem; background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 1rem 1.25rem; }
+form.stacked .field { margin-bottom: 0.9rem; }
+form.stacked label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.25rem; }
+form.stacked input[type="text"], form.stacked input[type="email"], form.stacked input[type="password"],
+form.stacked input[type="number"], form.stacked input[type="datetime-local"],
+form.stacked select, form.stacked textarea {
+  width: 100%;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font: inherit;
+}
+form.stacked textarea { min-height: 5.5rem; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: end; margin: 0.75rem 0 1rem; }
+.filters label { display: block; font-size: 0.75rem; color: var(--muted); }
+.filters input, .filters select { padding: 0.35rem 0.5rem; border: 1px solid var(--line); border-radius: 4px; }
+
+.errors { background: #fbeaea; border: 1px solid #edc4c4; border-radius: 4px; padding: 0.6rem 1rem; margin-bottom: 1rem; }
+.errors ul { margin: 0.25rem 0 0; padding-left: 1.2rem; }
+
+.empty {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--muted);
+  background: #fff;
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  background: #e8edf3;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.badge.status-requested { background: #efe9fb; }
+.badge.status-scheduled { background: #e2ecfa; }
+.badge.status-in_progress { background: #fdf3d8; }
+.badge.status-completed { background: #e7f4ec; }
+.badge.status-invoiced { background: #dcefe6; color: var(--ok); }
+.badge.status-cancelled { background: #f0f0f0; color: var(--muted); }
+.badge.priority-urgent { background: #fbeaea; color: var(--danger); }
+.badge.priority-low { background: #f0f0f0; color: var(--muted); }
+.badge.inactive { background: #f0f0f0; color: var(--muted); }
+
+.board { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem; }
+.board .lane { background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 0.75rem; }
+.board .lane .count { font-size: 1.6rem; font-weight: 700; }
+.board .lane .label { color: var(--muted); font-size: 0.85rem; }
+
+.detail-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 1.25rem; align-items: start; }
+.card { background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.card h2 { margin-top: 0; }
+dl.facts { display: grid; grid-template-columns: max-content 1fr; gap: 0.3rem 1rem; margin: 0; }
+dl.facts dt { color: var(--muted); }
+dl.facts dd { margin: 0; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.pager { display: flex; gap: 1rem; margin-top: 1rem; align-items: center; color: var(--muted); }
+
+.auth-box { max-width: 22rem; margin: 12vh auto 0; }
+.auth-box h1 { text-align: center; }
+
+.token-reveal { background: #fdf3d8; border: 1px solid #ecd9a0; border-radius: 4px; padding: 0.75rem 1rem; font-family: ui-monospace, monospace; }
+
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; }
+.muted { color: var(--muted); }
+.amount { text-align: right; font-variant-numeric: tabular-nums; }
+th.amount { text-align: right; }
