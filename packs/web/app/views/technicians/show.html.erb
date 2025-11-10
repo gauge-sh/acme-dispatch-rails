@@ -1,0 +1,51 @@
+<div class="page-head">
+  <h1>
+    <%= @technician.name %>
+    <% unless @technician.is_active %><span class="badge inactive">inactive</span><% end %>
+  </h1>
+  <div class="actions">
+    <%= link_to "Week schedule", schedule_technician_path(@technician), class: "button subtle" %>
+    <%= link_to "Edit", edit_technician_path(@technician), class: "button subtle" %>
+    <% if current_user.admin? %>
+      <%= button_to "Delete", @technician, method: :delete, class: "danger" %>
+    <% end %>
+  </div>
+</div>
+
+<div class="detail-grid">
+  <section>
+    <h2>Upcoming appointments</h2>
+    <% if @upcoming.any? %>
+      <table>
+        <thead><tr><th>When</th><th>Job</th><th>Customer</th></tr></thead>
+        <tbody>
+          <% @upcoming.each do |appointment| %>
+            <tr>
+              <td><%= appointment.scheduled_start.strftime("%a %b %-d, %H:%M") %>–<%= appointment.scheduled_end.strftime("%H:%M") %></td>
+              <td><%= link_to appointment.job.title, appointment.job %></td>
+              <td><%= appointment.job.customer.name %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="empty">Nothing booked ahead.</div>
+    <% end %>
+  </section>
+
+  <aside class="card">
+    <h2>Details</h2>
+    <dl class="facts">
+      <dt>Rate</dt><dd><%= number_to_currency(@technician.hourly_cost_cents / 100.0) %>/hour</dd>
+      <dt>Phone</dt><dd><%= @technician.phone || "—" %></dd>
+      <dt>Skills</dt>
+      <dd>
+        <% if @technician.skill_tags.any? %>
+          <% @technician.skill_tags.each do |tag| %><span class="badge"><%= tag %></span> <% end %>
+        <% else %>
+          —
+        <% end %>
+      </dd>
+    </dl>
+  </aside>
+</div>

@@ -1,0 +1,29 @@
+<div class="page-head">
+  <h1><%= @technician.name %> — week of <%= @week_start.strftime("%b %-d, %Y") %></h1>
+  <div class="actions">
+    <%= link_to "← Previous", schedule_technician_path(@technician, week: @week_start - 7), class: "button subtle" %>
+    <%= link_to "Next →", schedule_technician_path(@technician, week: @week_start + 7), class: "button subtle" %>
+  </div>
+</div>
+
+<% if @by_day.empty? %>
+  <div class="empty">No appointments this week.</div>
+<% else %>
+  <% (@week_start..@week_start + 6).each do |day| %>
+    <% visits = @by_day.fetch(day, []) %>
+    <% next if visits.empty? %>
+    <h2><%= day.strftime("%A, %b %-d") %></h2>
+    <table>
+      <tbody>
+        <% visits.each do |appointment| %>
+          <tr>
+            <td><%= appointment.scheduled_start.strftime("%H:%M") %>–<%= appointment.scheduled_end.strftime("%H:%M") %></td>
+            <td><%= link_to appointment.job.title, appointment.job %></td>
+            <td><%= appointment.job.customer.name %></td>
+            <td class="muted"><%= appointment.completion_notes %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>

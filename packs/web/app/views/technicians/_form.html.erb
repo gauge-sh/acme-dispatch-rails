@@ -1,0 +1,26 @@
+<%= render "shared/errors", record: technician %>
+
+<%= form_with model: technician, class: "stacked" do |f| %>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :phone %>
+    <%= f.text_field :phone %>
+  </div>
+  <div class="field">
+    <%= f.label :hourly_cost_cents, "Hourly rate (cents)" %>
+    <%= f.number_field :hourly_cost_cents, min: 1 %>
+  </div>
+  <div class="field">
+    <%= f.label :skill_tags, "Skills (comma separated)" %>
+    <%= f.text_field :skill_tags, value: technician.skill_tags.join(", ") %>
+  </div>
+  <% if technician.persisted? %>
+    <div class="field">
+      <label><%= f.check_box :is_active %> Active — can take new appointments</label>
+    </div>
+  <% end %>
+  <%= f.submit %>
+<% end %>
