@@ -1,0 +1,44 @@
+<div class="page-head">
+  <h1><%= @customer.name %></h1>
+  <div class="actions">
+    <%= link_to "Edit", edit_customer_path(@customer), class: "button subtle" %>
+    <%= button_to "Delete", @customer, method: :delete, class: "danger" %>
+  </div>
+</div>
+
+<div class="detail-grid">
+  <section>
+    <h2>Jobs</h2>
+    <% if @jobs.any? %>
+      <table>
+        <thead><tr><th>Title</th><th>Priority</th><th>Status</th><th>Opened</th></tr></thead>
+        <tbody>
+          <% @jobs.each do |job| %>
+            <tr>
+              <td><%= link_to job.title, job %></td>
+              <td><span class="badge priority-<%= job.priority %>"><%= job.priority %></span></td>
+              <td><span class="badge status-<%= job.status %>"><%= job.status.humanize %></span></td>
+              <td><%= job.created_at.to_date %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="empty">No jobs for this customer. <%= link_to "Open one", new_job_path(customer_id: @customer.id) %>.</div>
+    <% end %>
+  </section>
+
+  <aside class="card">
+    <h2>Details</h2>
+    <dl class="facts">
+      <dt>Address</dt><dd><%= @customer.service_address %></dd>
+      <dt>Email</dt><dd><%= @customer.contact_email || "—" %></dd>
+      <dt>Phone</dt><dd><%= @customer.phone || "—" %></dd>
+      <dt>Since</dt><dd><%= @customer.created_at.to_date %></dd>
+    </dl>
+    <% if @customer.notes %>
+      <h2>Notes</h2>
+      <p><%= @customer.notes %></p>
+    <% end %>
+  </aside>
+</div>

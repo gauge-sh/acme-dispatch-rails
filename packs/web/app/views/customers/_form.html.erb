@@ -1,0 +1,25 @@
+<%= render "shared/errors", record: customer %>
+
+<%= form_with model: customer, class: "stacked" do |f| %>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :service_address %>
+    <%= f.text_field :service_address %>
+  </div>
+  <div class="field">
+    <%= f.label :contact_email %>
+    <%= f.email_field :contact_email %>
+  </div>
+  <div class="field">
+    <%= f.label :phone %>
+    <%= f.text_field :phone %>
+  </div>
+  <div class="field">
+    <%= f.label :notes %>
+    <%= f.text_area :notes %>
+  </div>
+  <%= f.submit %>
+<% end %>

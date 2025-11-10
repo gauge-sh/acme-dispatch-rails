@@ -1,0 +1,11 @@
+<% if pager.pages > 1 %>
+  <div class="pager">
+    <% unless pager.first? %>
+      <%= link_to "← Newer", url_for(request.query_parameters.merge(page: pager.page - 1)) %>
+    <% end %>
+    <span>Page <%= pager.page %> of <%= pager.pages %> (<%= pager.total %> total)</span>
+    <% unless pager.last? %>
+      <%= link_to "Older →", url_for(request.query_parameters.merge(page: pager.page + 1)) %>
+    <% end %>
+  </div>
+<% end %>
