@@ -1,0 +1,112 @@
+<div class="page-head">
+  <h1><%= @job.title %></h1>
+  <div class="actions">
+    <% @next_statuses.each do |status| %>
+      <%= button_to "Mark #{status.humanize.downcase}", transition_job_path(@job, status: status), class: "subtle" %>
+    <% end %>
+    <% if @job.completed? && @job.invoice_record.nil? %>
+      <%= button_to "Create invoice record", invoice_job_path(@job) %>
+    <% end %>
+    <%= link_to "Edit", edit_job_path(@job), class: "button subtle" %>
+    <% unless @job.invoiced? %>
+      <%= button_to "Delete", @job, method: :delete, class: "danger" %>
+    <% end %>
+  </div>
+</div>
+
+<p>
+  <span class="badge status-<%= @job.status %>"><%= @job.status.humanize %></span>
+  <span class="badge priority-<%= @job.priority %>"><%= @job.priority %> priority</span>
+  for <%= link_to @job.customer.name, @job.customer %>
+  <% if @job.invoice_record %>
+    · <%= link_to "invoice record ##{@job.invoice_record.id}", invoice_record_path(@job.invoice_record) %>
+  <% end %>
+</p>
+
+<% if @job.description %>
+  <div class="card"><p><%= @job.description %></p></div>
+<% end %>
+
+<div class="detail-grid">
+  <section>
+    <h2>Appointments</h2>
+    <% if @appointments.any? %>
+      <table>
+        <thead><tr><th>When</th><th>Technician</th><th>Notes</th><th></th></tr></thead>
+        <tbody>
+          <% @appointments.each do |appointment| %>
+            <tr>
+              <td>
+                <%= appointment.scheduled_start.strftime("%b %-d, %H:%M") %>–<%= appointment.scheduled_end.strftime("%H:%M") %>
+                <% if appointment.weekend? %><span class="badge">weekend</span><% end %>
+              </td>
+              <td><%= link_to appointment.technician.name, appointment.technician %></td>
+              <td class="muted"><%= appointment.completion_notes %></td>
+              <td class="actions">
+                <%= link_to "Edit", edit_appointment_path(appointment) %>
+                <%= button_to "Remove", appointment_path(appointment), method: :delete, class: "linkish" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="empty">Not scheduled yet.</div>
+    <% end %>
+    <% if Dispatch::StatusMachine.accepts_appointments?(@job.status) %>
+      <p><%= link_to "Schedule a visit", new_job_appointment_path(@job), class: "button subtle" %></p>
+    <% end %>
+
+    <h2>Parts used</h2>
+    <% if @job.job_parts.any? %>
+      <table>
+        <thead><tr><th>Part</th><th>Qty</th><th class="amount">Unit price</th><th class="amount">Line</th><th></th></tr></thead>
+        <tbody>
+          <% @job.job_parts.each do |job_part| %>
+            <tr>
+              <td><%= link_to job_part.part.name, job_part.part %> <span class="mono muted"><%= job_part.part.sku %></span></td>
+              <td><%= job_part.quantity %></td>
+              <td class="amount"><%= number_to_currency(job_part.unit_price_cents / 100.0) %></td>
+              <td class="amount"><%= number_to_currency(job_part.quantity * job_part.unit_price_cents / 100.0) %></td>
+              <td>
+                <% unless @job.invoiced? %>
+                  <%= button_to "Return", job_part_path(job_part), method: :delete, class: "linkish" %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="empty">No parts recorded.</div>
+    <% end %>
+
+    <% if Dispatch::StatusMachine.accepts_parts?(@job.status) %>
+      <%= form_with url: job_job_parts_path(@job), class: "filters" do %>
+        <div>
+          <label for="part_id">Part</label>
+          <select name="part_id" id="part_id">
+            <% @parts_in_stock.each do |part| %>
+              <option value="<%= part.id %>"><%= part.name %> (<%= part.stock_level.quantity_on_hand %> on hand)</option>
+            <% end %>
+          </select>
+        </div>
+        <div>
+          <label for="quantity">Qty</label>
+          <input type="number" name="quantity" id="quantity" value="1" min="1" style="width: 5rem">
+        </div>
+        <button type="submit" class="subtle">Record part</button>
+      <% end %>
+    <% end %>
+  </section>
+
+  <aside class="card">
+    <h2>Details</h2>
+    <dl class="facts">
+      <dt>Customer</dt><dd><%= link_to @job.customer.name, @job.customer %></dd>
+      <dt>Address</dt><dd><%= @job.customer.service_address %></dd>
+      <dt>Opened</dt><dd><%= @job.created_at.to_date %></dd>
+      <dt>Updated</dt><dd><%= @job.updated_at.to_date %></dd>
+    </dl>
+  </aside>
+</div>

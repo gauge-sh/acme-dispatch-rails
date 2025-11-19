@@ -1,0 +1,63 @@
+<div class="page-head">
+  <h1>Jobs</h1>
+  <%= link_to "New job", new_job_path, class: "button" %>
+</div>
+
+<%= form_with url: jobs_path, method: :get, class: "filters" do %>
+  <div>
+    <label for="q">Search</label>
+    <input type="search" name="q" id="q" value="<%= params[:q] %>" placeholder="Title">
+  </div>
+  <div>
+    <label for="status">Status</label>
+    <select name="status" id="status">
+      <option value="">Any</option>
+      <% Dispatch::StatusMachine::STATUSES.each do |status| %>
+        <option value="<%= status %>" <%= "selected" if params[:status] == status %>><%= status.humanize %></option>
+      <% end %>
+    </select>
+  </div>
+  <div>
+    <label for="priority">Priority</label>
+    <select name="priority" id="priority">
+      <option value="">Any</option>
+      <% %w[low normal urgent].each do |priority| %>
+        <option value="<%= priority %>" <%= "selected" if params[:priority] == priority %>><%= priority.humanize %></option>
+      <% end %>
+    </select>
+  </div>
+  <div>
+    <label for="customer_id">Customer</label>
+    <select name="customer_id" id="customer_id">
+      <option value="">Any</option>
+      <% @customers.each do |customer| %>
+        <option value="<%= customer.id %>" <%= "selected" if params[:customer_id] == customer.id.to_s %>><%= customer.name %></option>
+      <% end %>
+    </select>
+  </div>
+  <button type="submit" class="subtle">Filter</button>
+<% end %>
+
+<% if @jobs.any? %>
+  <table>
+    <thead>
+      <tr><th>Title</th><th>Customer</th><th>Priority</th><th>Status</th><th>Opened</th></tr>
+    </thead>
+    <tbody>
+      <% @jobs.each do |job| %>
+        <tr>
+          <td><%= link_to job.title, job %></td>
+          <td><%= link_to job.customer.name, job.customer %></td>
+          <td><span class="badge priority-<%= job.priority %>"><%= job.priority %></span></td>
+          <td><span class="badge status-<%= job.status %>"><%= job.status.humanize %></span></td>
+          <td><%= job.created_at.to_date %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= render "shared/pager", pager: @pager %>
+<% elsif params.values_at(:q, :status, :priority, :customer_id).any?(&:present?) %>
+  <div class="empty">No jobs match those filters.</div>
+<% else %>
+  <div class="empty">No jobs yet. <%= link_to "Open the first one", new_job_path %>.</div>
+<% end %>

@@ -1,0 +1,21 @@
+<%= render "shared/errors", record: job %>
+
+<%= form_with model: job, class: "stacked" do |f| %>
+  <div class="field">
+    <%= f.label :customer_id, "Customer" %>
+    <%= f.collection_select :customer_id, customers, :id, :name, prompt: "Choose a customer" %>
+  </div>
+  <div class="field">
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :priority %>
+    <%= f.select :priority, %w[low normal urgent] %>
+  </div>
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_area :description %>
+  </div>
+  <%= f.submit %>
+<% end %>
