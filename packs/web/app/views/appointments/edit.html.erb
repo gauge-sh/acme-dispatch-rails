@@ -1,0 +1,3 @@
+<h1>Reschedule — <%= @job.title %></h1>
+<%= render "form", appointment: @appointment, technicians: @technicians,
+      url: appointment_path(@appointment), method: :patch %>

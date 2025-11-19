@@ -1,0 +1,21 @@
+<%= render "shared/errors", record: appointment %>
+
+<%= form_with model: appointment, url: url, method: method, class: "stacked" do |f| %>
+  <div class="field">
+    <%= f.label :technician_id, "Technician" %>
+    <%= f.collection_select :technician_id, technicians, :id, :name, prompt: "Choose a technician" %>
+  </div>
+  <div class="field">
+    <%= f.label :scheduled_start, "Starts (UTC)" %>
+    <%= f.datetime_local_field :scheduled_start %>
+  </div>
+  <div class="field">
+    <%= f.label :scheduled_end, "Ends (UTC)" %>
+    <%= f.datetime_local_field :scheduled_end %>
+  </div>
+  <div class="field">
+    <%= f.label :completion_notes %>
+    <%= f.text_area :completion_notes %>
+  </div>
+  <%= f.submit "Save appointment" %>
+<% end %>

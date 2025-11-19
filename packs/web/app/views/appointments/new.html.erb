@@ -1,0 +1,3 @@
+<h1>Schedule a visit — <%= @job.title %></h1>
+<%= render "form", appointment: @appointment, technicians: @technicians,
+      url: job_appointments_path(@job), method: :post %>
