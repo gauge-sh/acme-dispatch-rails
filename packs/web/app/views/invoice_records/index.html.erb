@@ -1,0 +1,25 @@
+<h1>Invoice records</h1>
+
+<% if @records.any? %>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Job</th><th>Customer</th><th class="amount">Labor</th><th class="amount">Parts</th><th class="amount">Total</th><th>Created</th></tr>
+    </thead>
+    <tbody>
+      <% @records.each do |record| %>
+        <tr>
+          <td><%= link_to record.id, record %></td>
+          <td><%= link_to record.job.title, record.job %></td>
+          <td><%= record.job.customer.name %></td>
+          <td class="amount"><%= number_to_currency(record.labor_cents / 100.0) %></td>
+          <td class="amount"><%= number_to_currency(record.parts_cents / 100.0) %></td>
+          <td class="amount"><strong><%= number_to_currency(record.total_cents / 100.0) %></strong></td>
+          <td><%= record.created_at.to_date %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= render "shared/pager", pager: @pager %>
+<% else %>
+  <div class="empty">Nothing billed yet. Complete a job, then create its invoice record from the job page.</div>
+<% end %>
