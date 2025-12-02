@@ -2,6 +2,7 @@ class Part < ApplicationRecord
   SKU_FORMAT = /\A[A-Z0-9-]+\z/
 
   has_one :stock_level, dependent: :destroy
+  has_many :job_parts, dependent: nil
 
   normalizes :sku, :name, with: ->(value) { value.strip }
 
@@ -15,7 +16,15 @@ class Part < ApplicationRecord
   # Every part tracks stock from the moment it exists.
   after_create { create_stock_level!(quantity_on_hand: 0) }
 
+  before_destroy :refuse_destroy_when_used
+
   private
+
+  def refuse_destroy_when_used
+    return unless job_parts.exists?
+
+    raise Dispatch::ValidationFailed, "part has been used on jobs and cannot be deleted"
+  end
 
   def price_covers_cost
     return if unit_price_cents.blank? || unit_cost_cents.blank?

@@ -1,0 +1,57 @@
+<div class="page-head">
+  <h1><span class="mono"><%= @part.sku %></span> — <%= @part.name %></h1>
+  <div class="actions">
+    <%= link_to "Edit", edit_part_path(@part), class: "button subtle" %>
+    <% if current_user.admin? %>
+      <%= button_to "Delete", @part, method: :delete, class: "danger" %>
+    <% end %>
+  </div>
+</div>
+
+<div class="detail-grid">
+  <section>
+    <h2>Recent usage</h2>
+    <% if @recent_usage.any? %>
+      <table>
+        <thead><tr><th>Job</th><th>Customer</th><th>Qty</th><th class="amount">Price then</th><th>When</th></tr></thead>
+        <tbody>
+          <% @recent_usage.each do |job_part| %>
+            <tr>
+              <td><%= link_to job_part.job.title, job_part.job %></td>
+              <td><%= job_part.job.customer.name %></td>
+              <td><%= job_part.quantity %></td>
+              <td class="amount"><%= number_to_currency(job_part.unit_price_cents / 100.0) %></td>
+              <td><%= job_part.created_at.to_date %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="empty">Never used on a job.</div>
+    <% end %>
+  </section>
+
+  <aside>
+    <div class="card">
+      <h2>Stock</h2>
+      <p><strong style="font-size: 1.6rem"><%= @part.stock_level.quantity_on_hand %></strong> on hand</p>
+      <%= form_with url: adjust_stock_part_path(@part), class: "filters" do %>
+        <div>
+          <label for="delta">Adjust by</label>
+          <input type="number" name="delta" id="delta" placeholder="+/-" style="width: 6rem">
+        </div>
+        <button type="submit" class="subtle">Apply</button>
+      <% end %>
+      <p class="muted">Negative numbers remove stock; the count can never go below zero.</p>
+    </div>
+
+    <div class="card">
+      <h2>Pricing</h2>
+      <dl class="facts">
+        <dt>Unit cost</dt><dd><%= number_to_currency(@part.unit_cost_cents / 100.0) %></dd>
+        <dt>Unit price</dt><dd><%= number_to_currency(@part.unit_price_cents / 100.0) %></dd>
+        <dt>Margin</dt><dd><%= number_to_currency((@part.unit_price_cents - @part.unit_cost_cents) / 100.0) %></dd>
+      </dl>
+    </div>
+  </aside>
+</div>

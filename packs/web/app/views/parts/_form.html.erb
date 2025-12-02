@@ -1,0 +1,21 @@
+<%= render "shared/errors", record: part %>
+
+<%= form_with model: part, class: "stacked" do |f| %>
+  <div class="field">
+    <%= f.label :sku, "SKU (upper-case letters, digits, dashes)" %>
+    <%= f.text_field :sku %>
+  </div>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :unit_cost_cents, "Unit cost (cents)" %>
+    <%= f.number_field :unit_cost_cents, min: 1 %>
+  </div>
+  <div class="field">
+    <%= f.label :unit_price_cents, "Unit price (cents)" %>
+    <%= f.number_field :unit_price_cents, min: 1 %>
+  </div>
+  <%= f.submit %>
+<% end %>
