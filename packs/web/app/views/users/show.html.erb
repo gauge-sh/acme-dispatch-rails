@@ -1,0 +1,52 @@
+<div class="page-head">
+  <h1><%= @user.name %></h1>
+  <div class="actions">
+    <%= link_to "Edit", edit_user_path(@user), class: "button subtle" %>
+    <% unless @user == current_user %>
+      <%= button_to "Delete", @user, method: :delete, class: "danger" %>
+    <% end %>
+  </div>
+</div>
+
+<div class="detail-grid">
+  <section>
+    <h2>API tokens</h2>
+    <% if @tokens.any? %>
+      <table>
+        <thead><tr><th>Name</th><th>Issued</th><th>Last used</th><th></th></tr></thead>
+        <tbody>
+          <% @tokens.each do |token| %>
+            <tr>
+              <td><%= token.name %></td>
+              <td><%= token.created_at.to_date %></td>
+              <td><%= token.last_used_at ? time_ago_in_words(token.last_used_at) + " ago" : content_tag(:span, "never", class: "muted") %></td>
+              <td><%= button_to "Revoke", api_token_path(token), method: :delete, class: "linkish" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="empty">No API tokens issued.</div>
+    <% end %>
+
+    <h2>Issue a token</h2>
+    <%= form_with url: user_api_tokens_path(@user), scope: :api_token, class: "filters" do |f| %>
+      <div>
+        <label for="api_token_name">Purpose</label>
+        <%= f.text_field :name, placeholder: "e.g. reporting script" %>
+      </div>
+      <button type="submit" class="subtle">Issue token</button>
+    <% end %>
+    <p class="muted">The token is shown once, on issue. Only a digest is stored.</p>
+  </section>
+
+  <aside class="card">
+    <h2>Account</h2>
+    <dl class="facts">
+      <dt>Email</dt><dd><%= @user.email %></dd>
+      <dt>Role</dt><dd><span class="badge"><%= @user.role %></span></dd>
+      <dt>Status</dt><dd><%= @user.is_active ? "active" : "inactive" %></dd>
+      <dt>Created</dt><dd><%= @user.created_at.to_date %></dd>
+    </dl>
+  </aside>
+</div>

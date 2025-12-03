@@ -1,0 +1,27 @@
+<%= render "shared/errors", record: user %>
+
+<%= form_with model: user, class: "stacked" do |f| %>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.email_field :email %>
+  </div>
+  <div class="field">
+    <%= f.label :password %>
+    <%= f.password_field :password, autocomplete: "new-password",
+          placeholder: user.persisted? ? "Leave blank to keep the current password" : nil %>
+  </div>
+  <div class="field">
+    <%= f.label :role %>
+    <%= f.select :role, %w[dispatcher admin], {}, disabled: user == current_user %>
+  </div>
+  <% if user.persisted? && user != current_user %>
+    <div class="field">
+      <label><%= f.check_box :is_active %> Active — may sign in and use the API</label>
+    </div>
+  <% end %>
+  <%= f.submit %>
+<% end %>
