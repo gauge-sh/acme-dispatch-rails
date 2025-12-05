@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_17_090400) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_01_134700) do
   create_table "api_tokens", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "last_used_at"
@@ -102,6 +102,18 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_17_090400) do
     t.index ["sku"], name: "index_parts_on_sku", unique: true
   end
 
+  create_table "stock_adjustments", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "delta", null: false
+    t.string "note"
+    t.integer "part_id", null: false
+    t.integer "quantity_after", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.index ["part_id"], name: "index_stock_adjustments_on_part_id"
+    t.index ["user_id"], name: "index_stock_adjustments_on_user_id"
+  end
+
   create_table "stock_levels", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "part_id", null: false
@@ -139,5 +151,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_17_090400) do
   add_foreign_key "job_parts", "jobs"
   add_foreign_key "job_parts", "parts"
   add_foreign_key "jobs", "customers"
+  add_foreign_key "stock_adjustments", "parts"
+  add_foreign_key "stock_adjustments", "users"
   add_foreign_key "stock_levels", "parts"
 end

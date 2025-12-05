@@ -3,6 +3,7 @@ class Part < ApplicationRecord
 
   has_one :stock_level, dependent: :destroy
   has_many :job_parts, dependent: nil
+  has_many :stock_adjustments, dependent: :destroy
 
   normalizes :sku, :name, with: ->(value) { value.strip }
 

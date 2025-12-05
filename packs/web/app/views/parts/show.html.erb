@@ -33,6 +33,26 @@
 
   <aside>
     <div class="card">
+      <h2>Stock history</h2>
+      <% if @history.any? %>
+        <table>
+          <tbody>
+            <% @history.each do |adjustment| %>
+              <tr>
+                <td class="amount"><%= adjustment.delta.positive? ? "+#{adjustment.delta}" : adjustment.delta %></td>
+                <td>→ <%= adjustment.quantity_after %></td>
+                <td class="muted"><%= adjustment.note %></td>
+                <td class="muted"><%= adjustment.user&.name || "system" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p class="muted">No movements recorded.</p>
+      <% end %>
+    </div>
+
+    <div class="card">
       <h2>Stock</h2>
       <p><strong style="font-size: 1.6rem"><%= @part.stock_level.quantity_on_hand %></strong> on hand</p>
       <%= form_with url: adjust_stock_part_path(@part), class: "filters" do %>

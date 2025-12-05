@@ -13,6 +13,7 @@ class PartsController < ApplicationController
   def show
     @part = Part.find(params[:id])
     @recent_usage = @part.job_parts.includes(job: :customer).order(created_at: :desc).limit(10)
+    @history = @part.stock_adjustments.includes(:user).order(id: :desc).limit(15)
   end
 
   def new
@@ -54,7 +55,7 @@ class PartsController < ApplicationController
 
   def adjust_stock
     part = Part.find(params[:id])
-    part.stock_level.adjust!(params[:delta].to_i)
+    part.stock_level.adjust!(params[:delta].to_i, by: current_user, note: "manual adjustment")
     redirect_to part, notice: "Stock is now #{part.stock_level.reload.quantity_on_hand}."
   rescue Dispatch::Error => error
     redirect_to part, alert: error.message.upcase_first

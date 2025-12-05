@@ -19,7 +19,7 @@ class JobPart < ApplicationRecord
 
   def consume_stock
     Dispatch::StatusMachine.check_accepts_parts!(job.status)
-    part.stock_level.consume!(quantity)
+    part.stock_level.consume!(quantity, note: "used on job ##{job_id}")
   end
 
   def release_stock
@@ -27,6 +27,6 @@ class JobPart < ApplicationRecord
       raise Dispatch::ValidationFailed, "an invoiced job cannot be changed"
     end
 
-    part.stock_level.release!(quantity)
+    part.stock_level.release!(quantity, note: "returned from job ##{job_id}")
   end
 end

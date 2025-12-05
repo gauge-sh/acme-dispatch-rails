@@ -13,7 +13,7 @@ module Api
           raise Dispatch::ValidationFailed, "delta must be an integer"
         end
 
-        stock_level.adjust!(params[:delta])
+        stock_level.adjust!(params[:delta], by: current_user, note: "api adjustment")
         render json: Wire.stock_level(stock_level)
       end
     end
