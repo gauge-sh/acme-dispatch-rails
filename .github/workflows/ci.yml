@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2.3"
+          bundler-cache: true
+
+      - name: Rubocop
+        run: bin/rubocop -f github
+
+      - name: Package boundaries
+        run: bin/bundle exec packwerk check
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2.3"
+          bundler-cache: true
+
+      - name: Prepare database
+        run: bin/rails db:test:prepare
+
+      - name: Tests
+        run: bin/rails test test packs
+
+      - name: Seeds
+        run: RAILS_ENV=test bin/rails db:seed
