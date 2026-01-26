@@ -1,4 +1,18 @@
 class AppointmentsController < ApplicationController
+  # The office-wide schedule: one day at a time, everyone's visits.
+  def index
+    @day = begin
+      Date.iso8601(params[:day].to_s)
+    rescue Date::Error
+      Time.zone.today
+    end
+    scope = Appointment.includes(:technician, job: :customer)
+      .where(scheduled_start: @day.beginning_of_day..@day.end_of_day)
+    scope = scope.where(technician_id: params[:technician_id]) if params[:technician_id].present?
+    @appointments = scope.order(:scheduled_start, :id)
+    @technicians = Technician.order(:name)
+  end
+
   def new
     @job = Job.find(params[:job_id])
     @appointment = @job.appointments.build

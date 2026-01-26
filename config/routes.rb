@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     resources :appointments, only: %i[new create edit update destroy], shallow: true
     resources :job_parts, only: %i[create destroy], shallow: true
   end
+  get "schedule" => "appointments#index", as: :schedule
   resources :invoice_records, only: %i[index show]
   resources :users do
     resources :api_tokens, only: %i[create destroy], shallow: true

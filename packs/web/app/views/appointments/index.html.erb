@@ -1,0 +1,44 @@
+<div class="page-head">
+  <h1>Schedule — <%= @day.strftime("%A, %b %-d, %Y") %></h1>
+  <div class="actions">
+    <%= link_to "← Previous day", schedule_path(day: @day - 1, technician_id: params[:technician_id]), class: "button subtle" %>
+    <%= link_to "Today", schedule_path(technician_id: params[:technician_id]), class: "button subtle" %>
+    <%= link_to "Next day →", schedule_path(day: @day + 1, technician_id: params[:technician_id]), class: "button subtle" %>
+  </div>
+</div>
+
+<%= form_with url: schedule_path, method: :get, class: "filters" do %>
+  <input type="hidden" name="day" value="<%= @day.iso8601 %>">
+  <div>
+    <label for="technician_id">Technician</label>
+    <select name="technician_id" id="technician_id">
+      <option value="">Everyone</option>
+      <% @technicians.each do |technician| %>
+        <option value="<%= technician.id %>" <%= "selected" if params[:technician_id] == technician.id.to_s %>><%= technician.name %></option>
+      <% end %>
+    </select>
+  </div>
+  <button type="submit" class="subtle">Filter</button>
+<% end %>
+
+<% if @appointments.any? %>
+  <table>
+    <thead>
+      <tr><th>Time</th><th>Technician</th><th>Job</th><th>Customer</th><th>Address</th><th></th></tr>
+    </thead>
+    <tbody>
+      <% @appointments.each do |appointment| %>
+        <tr>
+          <td><%= appointment.scheduled_start.strftime("%H:%M") %>–<%= appointment.scheduled_end.strftime("%H:%M") %></td>
+          <td><%= link_to appointment.technician.name, appointment.technician %></td>
+          <td><%= link_to appointment.job.title, appointment.job %></td>
+          <td><%= appointment.job.customer.name %></td>
+          <td class="muted"><%= appointment.job.customer.service_address %></td>
+          <td><%= link_to "Reschedule", edit_appointment_path(appointment) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="empty">No visits on this day.</div>
+<% end %>
