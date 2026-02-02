@@ -39,4 +39,4 @@ jobs:
         run: bin/rails test test packs
 
       - name: Seeds
-        run: RAILS_ENV=test bin/rails db:seed
+        run: bin/rails db:prepare db:seed
