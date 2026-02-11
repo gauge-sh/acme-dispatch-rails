@@ -66,8 +66,8 @@
             <tr>
               <td><%= link_to job_part.part.name, job_part.part %> <span class="mono muted"><%= job_part.part.sku %></span></td>
               <td><%= job_part.quantity %></td>
-              <td class="amount"><%= number_to_currency(job_part.unit_price_cents / 100.0) %></td>
-              <td class="amount"><%= number_to_currency(job_part.quantity * job_part.unit_price_cents / 100.0) %></td>
+              <td class="amount"><%= cents(job_part.unit_price_cents) %></td>
+              <td class="amount"><%= cents(job_part.quantity * job_part.unit_price_cents) %></td>
               <td>
                 <% unless @job.invoiced? %>
                   <%= button_to "Return", job_part_path(job_part), method: :delete, class: "linkish" %>

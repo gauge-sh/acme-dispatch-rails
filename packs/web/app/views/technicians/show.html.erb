@@ -36,7 +36,7 @@
   <aside class="card">
     <h2>Details</h2>
     <dl class="facts">
-      <dt>Rate</dt><dd><%= number_to_currency(@technician.hourly_cost_cents / 100.0) %>/hour</dd>
+      <dt>Rate</dt><dd><%= cents(@technician.hourly_cost_cents) %>/hour</dd>
       <dt>Phone</dt><dd><%= @technician.phone || "—" %></dd>
       <dt>Skills</dt>
       <dd>

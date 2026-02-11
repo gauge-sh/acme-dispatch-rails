@@ -11,9 +11,9 @@
           <td><%= link_to record.id, record %></td>
           <td><%= link_to record.job.title, record.job %></td>
           <td><%= record.job.customer.name %></td>
-          <td class="amount"><%= number_to_currency(record.labor_cents / 100.0) %></td>
-          <td class="amount"><%= number_to_currency(record.parts_cents / 100.0) %></td>
-          <td class="amount"><strong><%= number_to_currency(record.total_cents / 100.0) %></strong></td>
+          <td class="amount"><%= cents(record.labor_cents) %></td>
+          <td class="amount"><%= cents(record.parts_cents) %></td>
+          <td class="amount"><strong><%= cents(record.total_cents) %></strong></td>
           <td><%= record.created_at.to_date %></td>
         </tr>
       <% end %>

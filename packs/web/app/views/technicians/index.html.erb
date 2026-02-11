@@ -40,7 +40,7 @@
               <span class="badge"><%= tag %></span>
             <% end %>
           </td>
-          <td class="amount"><%= number_to_currency(technician.hourly_cost_cents / 100.0) %>/h</td>
+          <td class="amount"><%= cents(technician.hourly_cost_cents) %>/h</td>
           <td><%= technician.phone || content_tag(:span, "—", class: "muted") %></td>
           <td><%= link_to "Schedule", schedule_technician_path(technician) %></td>
         </tr>

@@ -21,8 +21,8 @@
         <tr>
           <td class="mono"><%= link_to part.sku, part %></td>
           <td><%= part.name %></td>
-          <td class="amount"><%= number_to_currency(part.unit_cost_cents / 100.0) %></td>
-          <td class="amount"><%= number_to_currency(part.unit_price_cents / 100.0) %></td>
+          <td class="amount"><%= cents(part.unit_cost_cents) %></td>
+          <td class="amount"><%= cents(part.unit_price_cents) %></td>
           <td class="amount"><%= part.stock_level.quantity_on_hand %></td>
         </tr>
       <% end %>

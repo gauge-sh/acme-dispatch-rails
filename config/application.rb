@@ -26,6 +26,7 @@ module AcmeDispatch
       config.eager_load_paths << root.join("packs/web/app", layer)
     end
     config.paths["app/views"] << "packs/web/app/views"
+    config.paths["app/helpers"] << "packs/web/app/helpers"
 
     config.generators.system_tests = nil
   end

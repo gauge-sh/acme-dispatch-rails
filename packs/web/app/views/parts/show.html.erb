@@ -20,7 +20,7 @@
               <td><%= link_to job_part.job.title, job_part.job %></td>
               <td><%= job_part.job.customer.name %></td>
               <td><%= job_part.quantity %></td>
-              <td class="amount"><%= number_to_currency(job_part.unit_price_cents / 100.0) %></td>
+              <td class="amount"><%= cents(job_part.unit_price_cents) %></td>
               <td><%= job_part.created_at.to_date %></td>
             </tr>
           <% end %>
@@ -68,9 +68,9 @@
     <div class="card">
       <h2>Pricing</h2>
       <dl class="facts">
-        <dt>Unit cost</dt><dd><%= number_to_currency(@part.unit_cost_cents / 100.0) %></dd>
-        <dt>Unit price</dt><dd><%= number_to_currency(@part.unit_price_cents / 100.0) %></dd>
-        <dt>Margin</dt><dd><%= number_to_currency((@part.unit_price_cents - @part.unit_cost_cents) / 100.0) %></dd>
+        <dt>Unit cost</dt><dd><%= cents(@part.unit_cost_cents) %></dd>
+        <dt>Unit price</dt><dd><%= cents(@part.unit_price_cents) %></dd>
+        <dt>Margin</dt><dd><%= cents(@part.unit_price_cents - @part.unit_cost_cents) %></dd>
       </dl>
     </div>
   </aside>
