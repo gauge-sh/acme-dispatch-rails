@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_01_134700) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_12_090100) do
   create_table "api_tokens", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "last_used_at"
@@ -90,6 +90,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_01_134700) do
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.index ["customer_id"], name: "index_jobs_on_customer_id"
+    t.index ["priority"], name: "index_jobs_on_priority"
+    t.index ["status"], name: "index_jobs_on_status"
   end
 
   create_table "parts", force: :cascade do |t|
