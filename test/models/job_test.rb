@@ -65,6 +65,16 @@ class JobTest < ActiveSupport::TestCase
     assert_equal "requested", job.reload.status
   end
 
+  test "deleting a job returns its recorded parts to stock" do
+    job = jobs(:fence_light)
+    JobPart.create!(job: job, part: parts(:filter), quantity: 4)
+    assert_equal 20, stock_levels(:filter).reload.quantity_on_hand
+
+    job.transition_to!("cancelled")
+    job.destroy!
+    assert_equal 24, stock_levels(:filter).reload.quantity_on_hand
+  end
+
   test "unknown statuses are refused before the machine is consulted" do
     error = assert_raises Dispatch::ValidationFailed do
       jobs(:fence_light).transition_to!("done")
