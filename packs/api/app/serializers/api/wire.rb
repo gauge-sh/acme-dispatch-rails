@@ -12,7 +12,7 @@ module Api
         phone: customer.phone,
         service_address: customer.service_address,
         notes: customer.notes,
-        **stamps(customer)
+        **timestamps(customer)
       }
     end
 
@@ -24,7 +24,7 @@ module Api
         skill_tags: technician.skill_tags,
         hourly_cost_cents: technician.hourly_cost_cents,
         is_active: technician.is_active,
-        **stamps(technician)
+        **timestamps(technician)
       }
     end
 
@@ -35,7 +35,7 @@ module Api
         name: user.name,
         role: user.role,
         is_active: user.is_active,
-        **stamps(user)
+        **timestamps(user)
       }
     end
 
@@ -46,7 +46,7 @@ module Api
         name: part.name,
         unit_cost_cents: part.unit_cost_cents,
         unit_price_cents: part.unit_price_cents,
-        **stamps(part)
+        **timestamps(part)
       }
     end
 
@@ -58,7 +58,7 @@ module Api
         description: job.description,
         priority: job.priority,
         status: job.status,
-        **stamps(job)
+        **timestamps(job)
       }
     end
 
@@ -74,7 +74,7 @@ module Api
         appointments: job.appointments.order(:scheduled_start, :id).map { |a| appointment(a) },
         job_parts: job.job_parts.order(:id).map { |jp| job_part(jp) },
         invoice_record_id: job.invoice_record&.id,
-        **stamps(job)
+        **timestamps(job)
       }
     end
 
@@ -86,7 +86,7 @@ module Api
         scheduled_start: time(appointment.scheduled_start),
         scheduled_end: time(appointment.scheduled_end),
         completion_notes: appointment.completion_notes,
-        **stamps(appointment)
+        **timestamps(appointment)
       }
     end
 
@@ -97,7 +97,7 @@ module Api
         part_id: job_part.part_id,
         quantity: job_part.quantity,
         unit_price_cents: job_part.unit_price_cents,
-        **stamps(job_part)
+        **timestamps(job_part)
       }
     end
 
@@ -107,7 +107,7 @@ module Api
         part_id: stock_level.part_id,
         quantity_on_hand: stock_level.quantity_on_hand,
         part: part(stock_level.part),
-        **stamps(stock_level)
+        **timestamps(stock_level)
       }
     end
 
@@ -119,7 +119,7 @@ module Api
         parts_cents: record.parts_cents,
         total_cents: record.total_cents,
         line_items: record.line_items.map { |line| line_item(line) },
-        **stamps(record)
+        **timestamps(record)
       }
     end
 
@@ -143,7 +143,7 @@ module Api
       value.utc.iso8601
     end
 
-    def stamps(record)
+    def timestamps(record)
       { created_at: time(record.created_at), updated_at: time(record.updated_at) }
     end
   end
