@@ -2,8 +2,7 @@ class JobsController < ApplicationController
   include Paged
 
   def index
-    scope = Job.includes(:customer)
-      .order(Arel.sql("CASE priority WHEN 'urgent' THEN 0 WHEN 'normal' THEN 1 ELSE 2 END"), created_at: :desc)
+    scope = Job.includes(:customer).order(created_at: :desc)
     scope = scope.where(status: params[:status]) if params[:status].present?
     scope = scope.where(priority: params[:priority]) if params[:priority].present?
     scope = scope.where(customer_id: params[:customer_id]) if params[:customer_id].present?
