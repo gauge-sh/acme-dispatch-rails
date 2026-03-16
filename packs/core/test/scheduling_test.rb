@@ -29,6 +29,18 @@ module Dispatch
       assert Scheduling.weekend?(friday_night_est)
     end
 
+    test "durations cross midnight without losing precision" do
+      hours = Scheduling.hours_between(Time.utc(2025, 3, 12, 23), Time.utc(2025, 3, 13, 1, 30))
+      assert_equal 2.5r, hours
+    end
+
+    test "the weekend boundary is exact" do
+      assert_not Scheduling.weekend?(Time.utc(2025, 3, 14, 23, 59, 59)) # Friday night
+      assert Scheduling.weekend?(Time.utc(2025, 3, 15, 0, 0, 0))        # Saturday midnight
+      assert Scheduling.weekend?(Time.utc(2025, 3, 16, 23, 59, 59))     # Sunday night
+      assert_not Scheduling.weekend?(Time.utc(2025, 3, 17, 0, 0, 0))    # Monday midnight
+    end
+
     test "a window must end after it starts" do
       error = assert_raises ValidationFailed do
         Scheduling.check_window!(Time.utc(2025, 3, 12, 10), Time.utc(2025, 3, 12, 10))
