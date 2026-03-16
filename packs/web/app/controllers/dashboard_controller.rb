@@ -1,8 +1,7 @@
 class DashboardController < ApplicationController
   def show
     @counts_by_status = Job.group(:status).count
-    @open_jobs = Job.where(status: %w[requested scheduled in_progress])
-      .includes(:customer).order(updated_at: :desc).limit(10)
+    @open_jobs = Job.open_for_work.includes(:customer).order(updated_at: :desc).limit(10)
     @today = Appointment.includes(:technician, job: :customer)
       .where(scheduled_start: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
       .order(:scheduled_start)

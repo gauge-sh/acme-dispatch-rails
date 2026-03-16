@@ -7,6 +7,8 @@ class Job < ApplicationRecord
   enum :priority, %w[low normal urgent].index_by(&:itself), default: "normal", validate: true
   enum :status, Dispatch::StatusMachine::STATUSES.index_by(&:itself), default: "requested", validate: true
 
+  scope :open_for_work, -> { where(status: Dispatch::StatusMachine::OPEN_FOR_SCHEDULING) }
+
   normalizes :title, with: ->(value) { value.strip }
   normalizes :description, with: ->(value) { value.strip.presence }
 
