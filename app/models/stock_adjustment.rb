@@ -6,4 +6,5 @@ class StockAdjustment < ApplicationRecord
   belongs_to :user, optional: true
 
   validates :delta, :quantity_after, presence: true
+  validates :note, length: { maximum: 200 }, allow_nil: true
 end
