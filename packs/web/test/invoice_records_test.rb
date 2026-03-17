@@ -26,6 +26,15 @@ class InvoiceRecordsTest < WebCase
     assert_select "td.amount strong", text: "$254.07"
   end
 
+  test "filters by customer" do
+    record = invoice_furnace
+    get invoice_records_path(customer_id: customers(:meridian).id)
+    assert_select "td a", text: record.id.to_s
+
+    get invoice_records_path(customer_id: customers(:quinn).id)
+    assert_select ".empty", text: "Nothing billed for this customer."
+  end
+
   test "shows the line items with surcharge badges" do
     record = invoice_furnace
     get invoice_record_path(record)

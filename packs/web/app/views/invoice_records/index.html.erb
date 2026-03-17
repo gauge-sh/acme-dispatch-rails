@@ -1,5 +1,18 @@
 <h1>Invoice records</h1>
 
+<%= form_with url: invoice_records_path, method: :get, class: "filters" do %>
+  <div>
+    <label for="customer_id">Customer</label>
+    <select name="customer_id" id="customer_id">
+      <option value="">Any</option>
+      <% @customers.each do |customer| %>
+        <option value="<%= customer.id %>" <%= "selected" if params[:customer_id] == customer.id.to_s %>><%= customer.name %></option>
+      <% end %>
+    </select>
+  </div>
+  <button type="submit" class="subtle">Filter</button>
+<% end %>
+
 <% if @records.any? %>
   <table>
     <thead>
@@ -20,6 +33,8 @@
     </tbody>
   </table>
   <%= render "shared/pager", pager: @pager %>
+<% elsif params[:customer_id].present? %>
+  <div class="empty">Nothing billed for this customer.</div>
 <% else %>
   <div class="empty">Nothing billed yet. Complete a job, then create its invoice record from the job page.</div>
 <% end %>
