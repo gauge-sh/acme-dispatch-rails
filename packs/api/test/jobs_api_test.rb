@@ -94,6 +94,30 @@ class JobsApiTest < ApiCase
     assert_response :no_content
   end
 
+  test "every status pair answers correctly over the wire" do
+    legal = {
+      "requested" => %w[scheduled cancelled],
+      "scheduled" => %w[in_progress cancelled],
+      "in_progress" => %w[completed cancelled],
+      "completed" => [],
+      "invoiced" => [],
+      "cancelled" => []
+    }
+    schedule(job: jobs(:fence_light), technician: technicians(:reyes), from: [ 9 ], to: [ 10 ])
+
+    legal.each do |from, allowed|
+      Dispatch::StatusMachine::STATUSES.each do |to|
+        jobs(:fence_light).update_column(:status, from)
+        post_api "/jobs/#{jobs(:fence_light).id}/transition", { status: to }
+        if allowed.include?(to)
+          assert_response :success, "#{from} -> #{to}"
+        else
+          assert_response :conflict, "#{from} -> #{to}"
+        end
+      end
+    end
+  end
+
   test "the detail shape nests appointments and job parts" do
     job = jobs(:furnace)
     appointment = schedule(job: job, technician: technicians(:reyes), from: [ 13 ], to: [ 14, 30 ])
