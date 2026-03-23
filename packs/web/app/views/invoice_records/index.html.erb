@@ -1,4 +1,7 @@
-<h1>Invoice records</h1>
+<div class="page-head">
+  <h1>Invoice records</h1>
+  <%= link_to "Download CSV", invoice_records_path(format: :csv, customer_id: params[:customer_id]), class: "button subtle" %>
+</div>
 
 <%= form_with url: invoice_records_path, method: :get, class: "filters" do %>
   <div>
