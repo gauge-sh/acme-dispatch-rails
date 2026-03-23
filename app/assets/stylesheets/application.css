@@ -137,3 +137,10 @@ dl.facts dd { margin: 0; }
 .muted { color: var(--muted); }
 .amount { text-align: right; font-variant-numeric: tabular-nums; }
 th.amount { text-align: right; }
+
+@media print {
+  .topbar, .flash, .actions, .filters, form, .pager { display: none !important; }
+  body { background: #fff; }
+  main { max-width: none; padding: 0; }
+  a { color: inherit; }
+}
