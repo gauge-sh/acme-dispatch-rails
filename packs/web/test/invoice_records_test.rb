@@ -35,6 +35,19 @@ class InvoiceRecordsTest < WebCase
     assert_select ".empty", text: "Nothing billed for this customer."
   end
 
+  test "exports a csv of what to bill" do
+    record = invoice_furnace
+    get invoice_records_path(format: :csv)
+    assert_response :success
+    assert_equal "text/csv", response.media_type
+
+    rows = CSV.parse(response.body, headers: true)
+    assert_equal 1, rows.size
+    assert_equal record.id.to_s, rows.first["id"]
+    assert_equal "25407", rows.first["total_cents"]
+    assert_equal "Meridian Property Group", rows.first["customer"]
+  end
+
   test "shows the line items with surcharge badges" do
     record = invoice_furnace
     get invoice_record_path(record)
