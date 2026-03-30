@@ -49,10 +49,18 @@ Tokens are issued per user from the web app (Users → user → "Issue a token")
 the plaintext is shown once and only a SHA-256 digest is stored. To try it:
 
 ```
-curl -H "Authorization: Bearer $TOKEN" localhost:3000/api/v1/jobs?status=requested
+curl -H "Authorization: Bearer $TOKEN" "localhost:3000/api/v1/jobs?status=requested"
+
+curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"status": "scheduled"}' localhost:3000/api/v1/jobs/12/transition
+
+curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"delta": -2}' localhost:3000/api/v1/stock-levels/7/adjust
 ```
 
-Shapes, filters, and error codes are specified in `docs/domain.md`.
+Errors come back as `{"error": {"code", "message"}}` with the codes and
+messages specified in `docs/domain.md`; conflicts (double bookings, stock
+going negative, illegal transitions) are 409s.
 
 ## Production notes
 
