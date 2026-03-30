@@ -131,8 +131,6 @@ dl.facts dd { margin: 0; }
 .auth-box { max-width: 22rem; margin: 12vh auto 0; }
 .auth-box h1 { text-align: center; }
 
-.token-reveal { background: #fdf3d8; border: 1px solid #ecd9a0; border-radius: 4px; padding: 0.75rem 1rem; font-family: ui-monospace, monospace; }
-
 .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; }
 .muted { color: var(--muted); }
 .amount { text-align: right; font-variant-numeric: tabular-nums; }
