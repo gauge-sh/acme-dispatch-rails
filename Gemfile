@@ -11,7 +11,7 @@ gem "railties", "~> 8.1.3"
 
 gem "devise", "~> 4.9"
 gem "propshaft"
-gem "puma", ">= 6.0"
+gem "puma", "~> 8.0"
 gem "sqlite3", ">= 2.1"
 
 group :development, :test do
