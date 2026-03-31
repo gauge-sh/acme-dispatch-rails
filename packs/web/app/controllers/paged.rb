@@ -1,7 +1,7 @@
 # Offset pagination for the web lists. The API has its own envelope; this
 # one only feeds the prev/next links.
 module Paged
-  PER_PAGE = 25
+  PER_PAGE = 50
 
   Pager = Data.define(:page, :pages, :total) do
     def first? = page <= 1
