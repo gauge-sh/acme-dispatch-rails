@@ -96,6 +96,30 @@ class InvoiceRecordsApiTest < ApiCase
     assert_equal 25407, body["total_cents"]
   end
 
+  test "record lists paginate like everything else" do
+    job = build_case_four_job
+    post_api "/jobs/#{job.id}/invoice"
+
+    get_api "/invoice-records", per_page: 1
+    assert_equal %w[items page per_page total], body.keys
+    assert_equal 1, body["total"]
+
+    get_api "/invoice-records", page: 2, per_page: 1
+    assert_empty body["items"]
+    assert_equal 1, body["total"]
+  end
+
+  test "line items keep their order on every read" do
+    job = build_case_four_job
+    post_api "/jobs/#{job.id}/invoice"
+    record_id = body["id"]
+
+    3.times do
+      get_api "/invoice-records/#{record_id}"
+      assert_equal %w[labor part], body["line_items"].map { |line| line["kind"] }
+    end
+  end
+
   test "records are immutable over the wire" do
     job = build_case_four_job
     post_api "/jobs/#{job.id}/invoice"
