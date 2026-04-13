@@ -73,6 +73,13 @@ class AppointmentTest < ActiveSupport::TestCase
     assert_equal "Swapped the igniter", appointment.reload.completion_notes
   end
 
+  test "both timestamps are required" do
+    appointment = Appointment.new(job: jobs(:furnace), technician: technicians(:reyes))
+    assert_not appointment.valid?
+    assert appointment.errors[:scheduled_start].any?
+    assert appointment.errors[:scheduled_end].any?
+  end
+
   test "completion notes are optional and bounded" do
     appointment = book(from: [ 9 ], to: [ 11 ])
     appointment.update!(completion_notes: "  Replaced igniter  ")
