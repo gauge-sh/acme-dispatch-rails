@@ -11,8 +11,6 @@
 /tmp/pids/*
 !/tmp/pids/.keep
 
-/storage/*
-!/storage/.keep
 /db/*.sqlite3
 /db/*.sqlite3-*
 
