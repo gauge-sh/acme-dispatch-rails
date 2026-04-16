@@ -36,7 +36,7 @@ in `packs/api/test`, web tests in `packs/web/test`, and model tests in
 
 ```
 bin/rubocop
-bin/bundle exec packwerk check
+bin/packwerk check
 ```
 
 Both run in CI. Packwerk enforces the package graph described in

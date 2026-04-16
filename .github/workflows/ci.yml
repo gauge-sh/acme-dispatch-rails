@@ -20,7 +20,7 @@ jobs:
         run: bin/rubocop -f github
 
       - name: Package boundaries
-        run: bin/bundle exec packwerk check
+        run: bin/packwerk check
 
   test:
     runs-on: ubuntu-latest

@@ -1,7 +1,7 @@
 # Architecture
 
 One Rails application, three packwerk packages plus the host. The boundaries
-are enforced — `bin/bundle exec packwerk check` runs in CI and fails the build
+are enforced — `bin/packwerk check` runs in CI and fails the build
 on a violation.
 
 ## Packages
