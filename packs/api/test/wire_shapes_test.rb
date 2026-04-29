@@ -32,6 +32,17 @@ class WireShapesTest < ApiCase
       body.keys
   end
 
+  test "nested appointments order by start then id, job parts by id" do
+    late = schedule(job: jobs(:furnace), technician: technicians(:reyes), from: [ 14 ], to: [ 15 ])
+    early = schedule(job: jobs(:furnace), technician: technicians(:okada), from: [ 8 ], to: [ 9 ])
+    first_part = JobPart.create!(job: jobs(:furnace), part: parts(:filter), quantity: 1)
+    second_part = JobPart.create!(job: jobs(:furnace), part: parts(:igniter), quantity: 1)
+
+    get_api "/jobs/#{jobs(:furnace).id}"
+    assert_equal [ early.id, late.id ], body["appointments"].map { |a| a["id"] }
+    assert_equal [ first_part.id, second_part.id ], body["job_parts"].map { |jp| jp["id"] }
+  end
+
   test "timestamps are utc with a z suffix everywhere" do
     get_api "/customers/#{customers(:meridian).id}"
     assert_match(/\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\z/, body["created_at"])
