@@ -36,3 +36,7 @@ Package boundaries are real — packwerk checks them in CI. The reasoning
 behind the split is in `docs/architecture.md`, the billing math in
 `docs/pricing.md`, day-to-day commands in `docs/runbook.md`, and the
 field-level behavioral contract in `docs/domain.md`.
+
+## License
+
+MIT — see `LICENSE`.
