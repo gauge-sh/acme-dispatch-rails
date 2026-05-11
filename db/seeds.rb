@@ -5,8 +5,8 @@
 rng = Random.new(20250601)
 
 ActiveRecord::Base.transaction do
-  [ InvoiceLineItem, InvoiceRecord, JobPart, Appointment, Job, StockLevel, Part,
-    ApiToken, User, Technician, Customer ].each(&:delete_all)
+  [ InvoiceLineItem, InvoiceRecord, JobPart, Appointment, Job, StockAdjustment,
+    StockLevel, Part, ApiToken, User, Technician, Customer ].each(&:delete_all)
 
   admin = User.create!(
     email: "admin@acme-dispatch.example", name: "Alex Winter",
