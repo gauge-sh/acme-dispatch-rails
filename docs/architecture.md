@@ -48,6 +48,10 @@ stylesheet. No JavaScript framework, no component library — forms post, pages
 reload. The host wires the pack's `app/*` directories into the autoload and
 view paths in `config/application.rb`.
 
+Beyond entity CRUD it carries the operational surfaces: the dispatch board,
+an office-wide day schedule, per-technician week schedules, the stock
+movement history on each part, and a CSV export of invoice records.
+
 ## Dependency graph
 
 ```
