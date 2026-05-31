@@ -41,6 +41,18 @@ class PartsTest < WebCase
     assert_select ".flash-alert", text: /Delta must not be zero/
   end
 
+  test "the part page shows the movement history" do
+    post adjust_stock_part_path(parts(:igniter)), params: { delta: 5 }
+    JobPart.create!(job: jobs(:furnace), part: parts(:igniter), quantity: 2)
+
+    get part_path(parts(:igniter))
+    assert_select ".card", text: /Stock history/
+    assert_select "td", text: "manual adjustment"
+    assert_select "td", text: "used on job ##{jobs(:furnace).id}"
+    assert_select "td", text: "Teddy Marsh"
+    assert_select "td", text: "system"
+  end
+
   test "only admins delete parts, and used parts refuse" do
     delete part_path(parts(:valve))
     assert_redirected_to root_path
