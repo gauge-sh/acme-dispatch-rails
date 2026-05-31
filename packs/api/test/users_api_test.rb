@@ -88,6 +88,18 @@ class UsersApiTest < ApiCase
     assert_not User.exists?(spare.id)
   end
 
+  test "self-deletion is allowed unless you are the last active admin" do
+    delete_api "/users/#{users(:marisol).id}", token: @admin_token
+    assert_response :bad_request
+    assert_api_error "validation_failed", "cannot remove the last active admin"
+
+    spare = User.create!(email: "iris@acme-dispatch.example", name: "Iris Chao", password: "dispatch-me-1", role: "admin")
+    token = ApiToken.create!(user: spare, name: "self").plaintext
+    delete_api "/users/#{spare.id}", token: token
+    assert_response :no_content
+    assert_not User.exists?(spare.id)
+  end
+
   test "password updates go through devise" do
     patch_api "/users/#{users(:teddy).id}", { password: "new-password-9" }, token: @admin_token
     assert_response :success
