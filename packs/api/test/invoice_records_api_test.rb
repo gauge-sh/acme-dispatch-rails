@@ -37,6 +37,20 @@ class InvoiceRecordsApiTest < ApiCase
     assert_equal false, part["weekend"]
   end
 
+  test "a non-terminating duration serializes as the shortest round-trip double" do
+    job = jobs(:oven)
+    schedule(job: job, technician: technicians(:reyes), from: [ 9 ], to: [ 9, 20 ])
+    job.transition_to!("scheduled").transition_to!("in_progress").transition_to!("completed")
+
+    post_api "/jobs/#{job.id}/invoice"
+    line = body["line_items"].sole
+    assert_equal 1.0 / 3, line["quantity"]
+    assert_includes response.body, "\"quantity\":0.3333333333333333"
+    # The amount comes from the exact third of an hour, not the rendering.
+    assert_equal 4267, line["amount_cents"]
+    assert_includes line["description"], "0.33h"
+  end
+
   test "whole-hour labor serializes quantity as a bare integer" do
     job = complete(jobs(:oven))
     post_api "/jobs/#{job.id}/invoice"
