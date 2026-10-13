@@ -2,8 +2,8 @@
 
 ## Requirements
 
-Ruby 3.2.3 (see `.ruby-version`). SQLite ships with the `sqlite3` gem — no
-external services of any kind.
+Ruby 3.2.3 (see `.ruby-version`). Local development uses SQLite through the
+`sqlite3` gem.
 
 ## First run
 
